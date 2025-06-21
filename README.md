@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js リンター設定プロジェクト
 
-## Getting Started
+これは[Next.js](https://nextjs.org)プロジェクトで、ESLintとoxlintの設定およびプラグインの統合を検証するためのプロジェクトです。
 
-First, run the development server:
+## プロジェクト概要
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Feature-Sliced Design (FSD)アーキテクチャを採用したNext.js 15.3.3のダッシュボードアプリケーションです。TypeScriptとTailwind CSS v4を使用してモダンなReact開発環境を構築しています。
+
+## リンター設定の作業履歴
+
+### 1. oxlintとESLintの統合設定
+- oxlintとESLintの同時実行環境を構築
+- `.oxlintrc.json`ファイルを作成してoxlintの設定を管理
+- `eslint.config.mjs`でoxlintとESLintの統合設定を実装
+
+### 2. eslint-plugin-unicornの導入
+oxlintがまだ対応していないESLintプラグインの検証として、`eslint-plugin-unicorn`を導入しました。
+
+**参考**: [oxc-project/oxc#481](https://github.com/oxc-project/oxc/issues/481)
+
+このイシューでは、oxlintが対応予定のESLintプラグイン一覧が記載されており、以下のプラグインが今後対応される予定です：
+- eslint-plugin-import
+- eslint-plugin-jsdoc  
+- eslint-plugin-jsx-a11y
+- eslint-plugin-jest
+- eslint-plugin-unicorn ← **今回導入したプラグイン**
+- eslint-plugin-react
+- eslint-plugin-next
+- その他多数
+
+### 3. 導入したunicornルール
+```javascript
+rules: {
+  "unicorn/filename-case": "error",        // ファイル名をkebab-caseに強制
+  "unicorn/no-null": "off",               // nullの使用を制限（無効化）
+  "unicorn/no-useless-undefined": "off",   // 不要なundefinedを制限（無効化）
+  "unicorn/prefer-node-protocol": "error", // node:プロトコルの使用を強制
+  "unicorn/prefer-module": "error",        // ESモジュールの使用を推奨
+  "unicorn/prefer-top-level-await": "error" // トップレベルawaitの使用を推奨
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. 修正した内容
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Node.jsプロトコルの修正
+```javascript
+// 修正前
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+// 修正後
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+```
 
-## Learn More
+#### ファイル名のkebab-case対応
+以下のコンポーネントファイルをkebab-caseにリネーム：
 
-To learn more about Next.js, take a look at the following resources:
+| 修正前 | 修正後 |
+|--------|--------|
+| `DashboardPage.tsx` | `dashboard-page.tsx` |
+| `Button.tsx` | `button.tsx` |
+| `Card.tsx` | `card.tsx` |
+| `Chart.tsx` | `chart.tsx` |
+| `AnalyticsWidget.tsx` | `analytics-widget.tsx` |
+| `SalesWidget.tsx` | `sales-widget.tsx` |
+| `TaskWidget.tsx` | `task-widget.tsx` |
+| `UserProfileWidget.tsx` | `user-profile-widget.tsx` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### インポート文の更新
+ファイル名変更に伴い、対応するindex.tsファイルのインポート文を全て更新しました。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. 最終結果
+```bash
+> pnpm lint
+> oxlint && eslint
 
-## Deploy on Vercel
+Found 0 warnings and 0 errors.
+Finished in 46ms on 28 files using 10 threads.
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**リンターエラー: 0件、警告: 0件** で完全にクリーンな状態を達成しました。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 開発環境の起動
+
+```bash
+# 依存関係のインストール
+pnpm install
+
+# 開発サーバーの起動
+pnpm dev
+
+# リンターの実行
+pnpm lint
+
+# プロダクションビルド
+pnpm build
+```
+
+## 技術スタック
+- **フレームワーク**: Next.js 15.3.3 (App Router)
+- **言語**: TypeScript 5+
+- **UI**: React 19
+- **スタイリング**: Tailwind CSS v4
+- **リンター**: oxlint + ESLint + eslint-plugin-unicorn
+- **パッケージマネージャー**: pnpm
+- **アーキテクチャ**: Feature-Sliced Design (FSD)
+
+## 学習ポイント
+1. **oxlintとESLintの併用**: 高速なoxlintと豊富なプラグインエコシステムを持つESLintの両方の利点を活用
+2. **プラグイン互換性**: oxlintが対応していないプラグインでもESLint側で補完可能
+3. **コード品質向上**: unicornプラグインによる厳格なコーディング規約の適用
+4. **ファイル命名規則**: kebab-caseによる一貫したファイル命名の重要性
