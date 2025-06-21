@@ -1,1 +1,1 @@
-export { TaskWidget } from "./ui/TaskWidget";
+export { TaskWidget } from "./ui/task-widget";

@@ -1,1 +1,1 @@
-export { AnalyticsWidget } from "./ui/AnalyticsWidget";
+export { AnalyticsWidget } from "./ui/analytics-widget";

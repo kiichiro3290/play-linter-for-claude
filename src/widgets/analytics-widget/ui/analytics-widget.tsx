@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, Chart } from "../../../shared/ui";
+import { useEffect, useState } from "react";
 import { AnalyticsData } from "../../../shared/types";
+import { Card, Chart } from "../../../shared/ui";
 
 export const AnalyticsWidget = () => {
 	const [analytics, setAnalytics] = useState<AnalyticsData[]>([]);

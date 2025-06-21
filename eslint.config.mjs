@@ -1,6 +1,8 @@
 import { FlatCompat } from "@eslint/eslintrc";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import oxlint from "eslint-plugin-oxlint";
+import unicorn from "eslint-plugin-unicorn";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,8 +17,22 @@ const ignoreConfig = {
 };
 
 const eslintConfig = [
-	...compat.extends("next/core-web-vitals", "next/typescript"),
 	ignoreConfig,
+	...oxlint.buildFromOxlintConfigFile(".oxlintrc.json"),
+	...compat.extends("next/core-web-vitals", "next/typescript"),
+	{
+		plugins: {
+			unicorn,
+		},
+		rules: {
+			"unicorn/filename-case": "error",
+			"unicorn/no-null": "off",
+			"unicorn/no-useless-undefined": "off",
+			"unicorn/prefer-node-protocol": "error",
+			"unicorn/prefer-module": "error",
+			"unicorn/prefer-top-level-await": "error",
+		},
+	},
 ];
 
 export default eslintConfig;
