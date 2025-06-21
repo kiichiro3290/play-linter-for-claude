@@ -1,0 +1,1 @@
+export { SalesWidget } from './ui/SalesWidget';
