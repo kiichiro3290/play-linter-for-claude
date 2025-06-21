@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
 
 		return NextResponse.json(mockUsers);
 	} catch (error) {
+		console.error("Failed to fetch user data:", error);
 		return NextResponse.json(
 			{ error: "Failed to fetch user data" },
 			{ status: 500 },
