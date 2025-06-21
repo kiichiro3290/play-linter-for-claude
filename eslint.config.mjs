@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 });
 
 const ignoreConfig = {
-	ignores: [".next/**", "node_modules/**"],
+	ignores: [".next/**", "node_modules/**", "dist/**", "biome.json"],
 };
 
 const eslintConfig = [

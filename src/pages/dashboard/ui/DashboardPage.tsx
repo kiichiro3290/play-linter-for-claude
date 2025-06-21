@@ -55,13 +55,13 @@ export const DashboardPage = () => {
 						</h3>
 						<div className="space-y-3">
 							<button className="w-full text-left px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
-								📊 Generate Report
+								Generate Report
 							</button>
 							<button className="w-full text-left px-4 py-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
-								➕ Create Task
+								Create Task
 							</button>
 							<button className="w-full text-left px-4 py-2 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-md hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
-								👥 Invite User
+								Invite User
 							</button>
 						</div>
 					</div>
